@@ -1,0 +1,33 @@
+{
+  "name": "basic-todo",
+  "version": "1.0.0",
+  "description": "Simple to do App to learn use state hook",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+      "build": "vite build",
+      "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Swaaleh/basic-todo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Swaaleh/basic-todo/issues"
+  },
+  "homepage": "https://github.com/Swaaleh/basic-todo#readme",
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "vite": "^6.3.5"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.6.0"
+  }
+}
