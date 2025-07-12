@@ -53,6 +53,9 @@ export default function App() {
                             </button>
                         </li>
                     ))}
+                    {todos.length === 0 && (
+                        <li>No ToDos added yet.</li>
+                    )}  
                 </ul>
             </div>
         </>
