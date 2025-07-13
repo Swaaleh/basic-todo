@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-
+import { v4 as uuidv4 } from "uuid";
     // This is a simple ToDo application component
     // It contains a form to add new ToDos and a section to list them
     // The form will have an input field and a button to submit the ToDo
@@ -19,7 +19,8 @@ export default function App() {
     const handleAddTodo = (e) => {
         e.preventDefault();
         if (todoInput.trim() === "") return; // Prevent empty ToDos
-        setTodos([...todos, todoInput]); // Add new ToDo
+        const newTodo = {id: uuidv4(), text: todoInput}; // Create new ToDo with unique ID
+        setTodos([...todos, newTodo]); // Add new ToDo
         setTodoInput(""); // Clear input field
     };
 
