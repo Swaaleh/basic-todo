@@ -15,6 +15,8 @@ import { v4 as uuidv4 } from "uuid";
 export default function App() {
     const [todos, setTodos] = useState([]); // State for ToDos
     const [todoInput, setTodoInput] = useState(""); // State for input field
+    const [editingId, setEditingId] = useState(null); // State for tracking the ToDo being edited
+    const [editInput, setEditInput] = useState(""); // State for editing input field
 
     const handleAddTodo = (e) => {
         e.preventDefault();
@@ -26,6 +28,25 @@ export default function App() {
 
     const handleRemoveTodo = (id) => {
         setTodos(todos.filter((todo) => todo.id !== id)); // Remove ToDo
+    };
+
+    const handleEditTodo = (id) => {
+        const todoToEdit = todos.find((todo) => todo.id === id); // Find ToDo to edit
+        setEditingId(id); // Set editing ID
+        setEditInput(todoToEdit.text); // Set editing input value
+    }
+    const handleUpdateTodo = (e) => {
+        e.preventDefault();
+        if (editInput.trim() === "") return; // Prevent empty ToDos
+        setTodos(todos.map((todo) => 
+            todo.id === editingId ? {...todo, text: editInput} : todo // Update ToDo text
+        ));
+        setEditingId(null); // Clear editing ID
+        setEditInput(""); // Clear editing input field
+    };
+    const handleCancelEdit = () => {
+        setEditingId(null); // Clear the editing state
+        setEditInput(""); // Clear editing input field
     };
 
     return (
@@ -48,10 +69,28 @@ export default function App() {
                 <ul>
                     {todos.map((todo) => (
                         <li key={todo.id}>
-                            {todo.text}{" "}
-                            <button onClick={() => handleRemoveTodo(todo.id)}>
-                                Remove
-                            </button>
+                            {editingId === todo.id ? (
+                                 //Render edit input field and button ifi this todo is being edited
+                                <form onSubmit={handleUpdateTodo}>
+                                    <input
+                                        type="text"
+                                        value={editInput}
+                                        onChange={(e) => setEditInput(e.target.value)}
+                                    />
+                                    <button type="submit">Update</button>
+                                    <button type="button" onClick={handleCancelEdit}>
+                                        Cancel
+                                    </button>
+                                </form>
+                            ): (
+                                 <>
+                                    {todo.text}{" "}
+                                    <button onClick={()=>handleEditTodo(todo.id)}>Edit</button>
+                                    <button onClick={() => handleRemoveTodo(todo.id)}>
+                                        Remove
+                                    </button>
+                                </>
+                            )}
                         </li>
                     ))}
                     {todos.length === 0 && (
