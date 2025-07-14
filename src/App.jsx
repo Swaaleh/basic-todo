@@ -78,7 +78,7 @@ export default function App() {
                                         onChange={(e) => setEditInput(e.target.value)}
                                     />
                                     <button type="submit">Update</button>
-                                    <button type="button" onClick={handleCancelEdit}>
+                                    <button onClick={handleCancelEdit}>
                                         Cancel
                                     </button>
                                 </form>
