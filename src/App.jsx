@@ -46,10 +46,10 @@ export default function App() {
             <div>
                 <h2>List of ToDos</h2>
                 <ul>
-                    {todos.map((todo, index) => (
-                        <li key={index}>
-                            {todo}{" "}
-                            <button onClick={() => handleRemoveTodo(index)}>
+                    {todos.map((todo) => (
+                        <li key={todo.id}>
+                            {todo.text}{" "}
+                            <button onClick={() => handleRemoveTodo(todo.id)}>
                                 Remove
                             </button>
                         </li>
