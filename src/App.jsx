@@ -24,8 +24,8 @@ export default function App() {
         setTodoInput(""); // Clear input field
     };
 
-    const handleRemoveTodo = (index) => {
-        setTodos(todos.filter((_, i) => i !== index)); // Remove ToDo
+    const handleRemoveTodo = (id) => {
+        setTodos(todos.filter((todo) => todo.id !== id)); // Remove ToDo
     };
 
     return (
