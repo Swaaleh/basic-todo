@@ -18,7 +18,7 @@ export default function App() {
         const storedTodos = JSON.parse(localStorage.getItem("todos"));
         return storedTodos || [];
     }); 
-    
+
     // State for ToDos
     const [todoInput, setTodoInput] = useState(""); // State for input field
     const [editingId, setEditingId] = useState(null); // State for tracking the ToDo being edited
@@ -69,8 +69,74 @@ export default function App() {
         setEditInput(""); // Clear editing input field
     };
 
+    // Function to handle clearing all ToDos
+    const handleClearTodos = () => {
+        setTodos([]); // Clear all ToDos
+    }
+
+    // Inline styles
+    const styles = {
+        container: {
+            maxWidth: "600px",
+            margin: "0 auto",
+            padding: "20px",
+            fontFamily: "Arial, sans-serif",
+            backgroundColor: "#f9f9f9",
+            borderRadius: "8px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        },
+        header: {
+            textAlign: "center",
+            color: "#333",
+        },
+        form: {
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "20px",
+        },
+        input: {
+            flex: "1",
+            padding: "10px",
+            marginRight: "10px",
+            border: "1px solid #ccc",
+            borderRadius: "4px",
+        },
+        button: {
+            padding: "10px 20px",
+            backgroundColor: "#007BFF",
+            color: "#fff",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+        },
+        buttonDanger: {
+            padding: "10px 20px",
+            backgroundColor: "#dc3545",
+            color: "#fff",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+        },
+        todoList: {
+            listStyle: "none",
+            padding: "0",
+        },
+        todoItem: {
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "10px",
+            borderBottom: "1px solid #ccc",
+        },
+        editForm: {
+            display: "flex",
+            justifyContent: "space-between",
+        },
+    };
+
     return (
-        <>
+        <div style={styles.container}>
+            <h2 style={styles.header}>ToDo App</h2>
             <div>
                 <h2>Add ToDo</h2>
                 <form onSubmit={handleAddTodo}>
@@ -117,7 +183,10 @@ export default function App() {
                         <li>No ToDos added yet.</li>
                     )}  
                 </ul>
+                {todos.length > 0 && (
+                    <button onClick={handleClearTodos}>Clear All ToDos</button>
+                )}
             </div>
-        </>
+        </div>
     );
 }
