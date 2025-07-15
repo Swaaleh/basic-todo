@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
     // This is a simple ToDo application component
     // It contains a form to add new ToDos and a section to list them
@@ -13,11 +13,25 @@ import { v4 as uuidv4 } from "uuid";
 
 
 export default function App() {
-    const [todos, setTodos] = useState([]); // State for ToDos
+    const [todos, setTodos] = useState(()=>{
+        // Initialize todos state from localStorage or an empty array
+        const storedTodos = JSON.parse(localStorage.getItem("todos"));
+        return storedTodos || [];
+    }); 
+    
+    // State for ToDos
     const [todoInput, setTodoInput] = useState(""); // State for input field
     const [editingId, setEditingId] = useState(null); // State for tracking the ToDo being edited
     const [editInput, setEditInput] = useState(""); // State for editing input field
 
+    // Save ToDos to localStorage whenever the todos state changes
+    useEffect(() => {
+        localStorage.setItem("todos", JSON.stringify(todos));
+    }
+    , [todos]);
+
+    // Functions to handle adding, removing, editing, and updating ToDos
+    // Function to handle adding a new ToDo
     const handleAddTodo = (e) => {
         e.preventDefault();
         if (todoInput.trim() === "") return; // Prevent empty ToDos
@@ -26,15 +40,19 @@ export default function App() {
         setTodoInput(""); // Clear input field
     };
 
+    // Function to handle removing a ToDo
     const handleRemoveTodo = (id) => {
         setTodos(todos.filter((todo) => todo.id !== id)); // Remove ToDo
     };
 
+    // Function to handle editing a ToDo
     const handleEditTodo = (id) => {
         const todoToEdit = todos.find((todo) => todo.id === id); // Find ToDo to edit
         setEditingId(id); // Set editing ID
         setEditInput(todoToEdit.text); // Set editing input value
-    }
+    };
+
+    // Function to handle updating a ToDo
     const handleUpdateTodo = (e) => {
         e.preventDefault();
         if (editInput.trim() === "") return; // Prevent empty ToDos
@@ -44,6 +62,8 @@ export default function App() {
         setEditingId(null); // Clear editing ID
         setEditInput(""); // Clear editing input field
     };
+
+    // Function to handle canceling the edit
     const handleCancelEdit = () => {
         setEditingId(null); // Clear the editing state
         setEditInput(""); // Clear editing input field
