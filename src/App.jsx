@@ -23,6 +23,7 @@ export default function App() {
     const [todoInput, setTodoInput] = useState(""); // State for input field
     const [editingId, setEditingId] = useState(null); // State for tracking the ToDo being edited
     const [editInput, setEditInput] = useState(""); // State for editing input field
+    const [feedback, setFeedback] = useState({message: "", type: ""}); // State for feedback messages
 
     // Save ToDos to localStorage whenever the todos state changes
     useEffect(() => {
@@ -34,15 +35,33 @@ export default function App() {
     // Function to handle adding a new ToDo
     const handleAddTodo = (e) => {
         e.preventDefault();
-        if (todoInput.trim() === "") return; // Prevent empty ToDos
+        if (todoInput.trim() === "") {
+            setFeedback({message: "Please enter a task.", type: "error"}); 
+            return;
+        } // Prevent empty ToDos
         const newTodo = {id: uuidv4(), text: todoInput}; // Create new ToDo with unique ID
         setTodos([...todos, newTodo]); // Add new ToDo
         setTodoInput(""); // Clear input field
+        setFeedback({message:"Task added successfully!", type: "success"}); // Set feedback message
+        setTimeout(() => {
+            setFeedback({message: "", type: ""}); // Clear feedback after 2 seconds
+        }
+        , 2000);
     };
 
     // Function to handle removing a ToDo
     const handleRemoveTodo = (id) => {
+        const todoExists = todos.some((todo) => todo.id === id);
+        if (!todoExists) {
+            setFeedback({message:"Task not found!", type: "error"});
+            return; // Prevent removing non-existing ToDos
+        }
         setTodos(todos.filter((todo) => todo.id !== id)); // Remove ToDo
+        setFeedback({message:"Task removed successfully!", type: "success"}); // Set feedback message
+        setTimeout(() => {
+            setFeedback({message: "", type: ""}); // Clear feedback after 2 seconds
+        }
+        , 2000);    
     };
 
     // Function to handle editing a ToDo
@@ -50,28 +69,46 @@ export default function App() {
         const todoToEdit = todos.find((todo) => todo.id === id); // Find ToDo to edit
         setEditingId(id); // Set editing ID
         setEditInput(todoToEdit.text); // Set editing input value
+        setTimeout(() => {
+            setFeedback({ message: "", type: "" }); // Clear feedback after 2 seconds
+        }
+        , 2000);
     };
 
     // Function to handle updating a ToDo
     const handleUpdateTodo = (e) => {
         e.preventDefault();
-        if (editInput.trim() === "") return; // Prevent empty ToDos
+        if (editInput.trim() === "") {
+            setFeedback({ message: "Please enter a task to update.", type: "error" });
+            return; 
+        } // Prevent empty ToDos
         setTodos(todos.map((todo) => 
             todo.id === editingId ? {...todo, text: editInput} : todo // Update ToDo text
         ));
         setEditingId(null); // Clear editing ID
         setEditInput(""); // Clear editing input field
+        setFeedback({ message: "Task updated successfully!", type: "success" }); // Set feedback message
+        setTimeout(() => {
+            setFeedback({ message: "", type: "" }); // Clear feedback after 2 seconds
+        }
+        , 2000);
     };
 
     // Function to handle canceling the edit
     const handleCancelEdit = () => {
         setEditingId(null); // Clear the editing state
         setEditInput(""); // Clear editing input field
+        setFeedback(""); // Clear feedback message
     };
 
     // Function to handle clearing all ToDos
     const handleClearTodos = () => {
         setTodos([]); // Clear all ToDos
+        setFeedback({ message: "All ToDos cleared successfully!", type: "success" }); // Set feedback message
+        setTimeout(() => {
+            setFeedback({ message: "", type: "" }); // Clear feedback after 2 seconds
+        }
+        , 2000);
     }
 
     // Inline styles
@@ -91,6 +128,17 @@ export default function App() {
             fontSize: "24px", 
             fontWeight: "500", 
             marginBottom: "20px",
+        },
+        feedback: {
+            textAlign: "center",
+            fontSize: "14px",
+            marginBottom: "10px",
+        },
+        feedbackSuccess: {
+            color: "#28a745",
+        },
+        feedbackError: {
+            color: "#dc3545", 
         },
         noTodos: {
             textAlign: "center",
@@ -165,7 +213,13 @@ export default function App() {
     return (
         <div style={styles.container}>
             <h2 style={styles.header}>Daily Focus</h2>
-            
+            {/* Display feedback message */}
+            {feedback && <p style={{
+                ...styles.feedback,
+                ...(feedback.type === "success" ? styles.feedbackSuccess : styles.feedbackError)
+            }}>
+                    {feedback.message}
+                    </p>} 
                 <form onSubmit={handleAddTodo} style={styles.form}>
                     <input
                         name="todoInput"
