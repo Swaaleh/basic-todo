@@ -87,10 +87,21 @@ export default function App() {
         },
         header: {
             textAlign: "center",
-            color: "#333",
+            color: "#5D5E61",
+            fontSize: "24px", 
+            fontWeight: "500", 
+            marginBottom: "20px",
+        },
+        noTodos: {
+            textAlign: "center",
+            color: "#888", 
+            fontSize: "16px", 
+            fontStyle: "italic", 
+            marginTop: "20px",
         },
         form: {
             display: "flex",
+            alignItems: "center",
             justifyContent: "space-between",
             marginBottom: "20px",
         },
@@ -107,6 +118,8 @@ export default function App() {
             color: "#fff",
             border: "none",
             borderRadius: "4px",
+            display: "flex",
+            alignItems: "center",
             cursor: "pointer",
         },
         buttonDanger: {
@@ -116,6 +129,8 @@ export default function App() {
             border: "none",
             borderRadius: "4px",
             cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
         },
         todoList: {
             listStyle: "none",
@@ -128,65 +143,81 @@ export default function App() {
             padding: "10px",
             borderBottom: "1px solid #ccc",
         },
+        todoText: {
+            flex: "1",
+            marginRight: "10px",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+        },
+        buttonGroup: {
+            display: "flex",
+            gap: "10px",
+        },
         editForm: {
             display: "flex",
             justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
         },
     };
 
     return (
         <div style={styles.container}>
-            <h2 style={styles.header}>ToDo App</h2>
-            <div>
-                <h2>Add ToDo</h2>
-                <form onSubmit={handleAddTodo}>
+            <h2 style={styles.header}>Daily Focus</h2>
+            
+                <form onSubmit={handleAddTodo} style={styles.form}>
                     <input
+                        name="todoInput"
+                        autoFocus   
                         type="text"
-                        placeholder="Enter your ToDo"
+                        placeholder="Enter your task"
                         value={todoInput}
                         onChange={(e) => setTodoInput(e.target.value)}
+                        style={styles.input}
                     />
-                    {" "}
-                    <button type="submit">Add</button>
+                    <button type="submit" style={styles.button}>Add</button>
                 </form>
-            </div>
-            <div>
-                <h2>List of ToDos</h2>
-                <ul>
+               {/* <h2>List of ToDos</h2> */}
+                <ul style={styles.todoList}>
                     {todos.map((todo) => (
-                        <li key={todo.id}>
+                        <li key={todo.id} style = {styles.todoItem}>
                             {editingId === todo.id ? (
-                                 //Render edit input field and button ifi this todo is being edited
-                                <form onSubmit={handleUpdateTodo}>
+                                 //Render edit input field and button if this todo is being edited
+                                <form onSubmit={handleUpdateTodo} style={styles.editForm}>
                                     <input
                                         type="text"
                                         value={editInput}
                                         onChange={(e) => setEditInput(e.target.value)}
+                                        style={styles.input}
                                     />
-                                    <button type="submit">Update</button>
-                                    <button onClick={handleCancelEdit}>
+                                    <div style={styles.buttonGroup}>
+                                    <button type="submit" style={styles.button}>Update</button>
+                                    <button onClick={handleCancelEdit} style={styles.buttonDanger}>
                                         Cancel
                                     </button>
+                                    </div>
                                 </form>
                             ): (
                                  <>
-                                    {todo.text}{" "}
-                                    <button onClick={()=>handleEditTodo(todo.id)}>Edit</button>
-                                    <button onClick={() => handleRemoveTodo(todo.id)}>
+                                    <span style={styles.todoText}> {todo.text}</span>
+                                    <div style={styles.buttonGroup}>
+                                    <button onClick={()=>handleEditTodo(todo.id)}style={styles.button}>Edit</button>
+                                    <button onClick={() => handleRemoveTodo(todo.id)} style={styles.buttonDanger}>
                                         Remove
                                     </button>
+                                    </div>
                                 </>
                             )}
                         </li>
                     ))}
                     {todos.length === 0 && (
-                        <li>No ToDos added yet.</li>
+                        <li style={styles.noTodos}>No task to focus today, add one.</li>
                     )}  
                 </ul>
                 {todos.length > 0 && (
-                    <button onClick={handleClearTodos}>Clear All ToDos</button>
+                    <button onClick={handleClearTodos} style={styles.buttonDanger}>Clear All ToDos</button>
                 )}
             </div>
-        </div>
-    );
+        );
 }
