@@ -101,6 +101,15 @@ export default function App() {
         setFeedback(""); // Clear feedback message
     };
 
+    // Function to handle toggling the completion status of a ToDo
+    const handleToggleComplete = (id) => {
+        setTodos(
+            todos.map((todo)=>
+                todo.id === id ? {...todo, completed: !todo.completed} : todo
+            )
+        );
+    }
+
     // Function to handle clearing all ToDos
     const handleClearTodos = () => {
         setTodos([]); // Clear all ToDos
@@ -198,6 +207,15 @@ export default function App() {
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
         },
+        todoTextCompleted: {
+            flex: "1",
+            marginRight: "10px",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            textDecoration: "line-through",
+            color: "#888",
+        },
         buttonGroup: {
             display: "flex",
             gap: "10px",
@@ -254,8 +272,18 @@ export default function App() {
                                 </form>
                             ): (
                                  <>
-                                    <span style={styles.todoText}> {todo.text}</span>
+                                    <span style={
+                                        todo.completed
+                                            ? styles.todoTextCompleted
+                                            : styles.todoText
+                                    }
+                                    > 
+                                    {todo.text}
+                                    </span>
                                     <div style={styles.buttonGroup}>
+                                    <button onClick={() => handleToggleComplete(todo.id)} style={styles.button}>
+                                        {todo.completed ? "Undo" : "Complete"}
+                                    </button>
                                     <button onClick={()=>handleEditTodo(todo.id)}style={styles.button}>Edit</button>
                                     <button onClick={() => handleRemoveTodo(todo.id)} style={styles.buttonDanger}>
                                         Remove
