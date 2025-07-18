@@ -1,6 +1,10 @@
 
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
+import Header from "./components/Header";
+import Feedback from "./components/Feedback";
+import TodoForm from "./components/TodoForm";
+import TodoList from "./components/TodoList";
     // This is a simple ToDo application component
     // It contains a form to add new ToDos and a section to list them
     // The form will have an input field and a button to submit the ToDo
@@ -113,14 +117,13 @@ export default function App() {
     // Function to handle clearing all ToDos
     const handleClearTodos = () => {
         setTodos([]); // Clear all ToDos
-        setFeedback({ message: "All ToDos cleared successfully!", type: "success" }); // Set feedback message
+        setFeedback({ message: "All ToDos cleared successfully!", type: "success" }); 
         setTimeout(() => {
             setFeedback({ message: "", type: "" }); // Clear feedback after 2 seconds
         }
         , 2000);
     }
 
-    // Inline styles
     const styles = {
         container: {
             maxWidth: "600px",
@@ -129,177 +132,46 @@ export default function App() {
             fontFamily: "Arial, sans-serif",
             backgroundColor: "#f9f9f9",
             borderRadius: "8px",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            boxShadow: "0 4px 8px rgba(231, 113, 113, 0.1)",
         },
-        header: {
-            textAlign: "center",
-            color: "#5D5E61",
-            fontSize: "24px", 
-            fontWeight: "500", 
-            marginBottom: "20px",
-        },
-        feedback: {
-            textAlign: "center",
-            fontSize: "14px",
-            marginBottom: "10px",
-        },
-        feedbackSuccess: {
-            color: "#28a745",
-        },
-        feedbackError: {
-            color: "#dc3545", 
-        },
-        noTodos: {
-            textAlign: "center",
-            color: "#888", 
-            fontSize: "16px", 
-            fontStyle: "italic", 
-            marginTop: "20px",
-        },
-        form: {
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: "20px",
-        },
-        input: {
-            flex: "1",
-            padding: "10px",
-            marginRight: "10px",
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-        },
-        button: {
-            padding: "10px 20px",
-            backgroundColor: "#007BFF",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-            display: "flex",
-            alignItems: "center",
-            cursor: "pointer",
-        },
-        buttonDanger: {
-            padding: "10px 20px",
-            backgroundColor: "#dc3545",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-        },
-        todoList: {
-            listStyle: "none",
-            padding: "0",
-        },
-        todoItem: {
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "10px",
-            borderBottom: "1px solid #ccc",
-        },
-        todoText: {
-            flex: "1",
-            marginRight: "10px",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-        },
-        todoTextCompleted: {
-            flex: "1",
-            marginRight: "10px",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            textDecoration: "line-through",
-            color: "#888",
-        },
-        buttonGroup: {
-            display: "flex",
-            gap: "10px",
-        },
-        editForm: {
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: "100%",
-        },
+        
     };
 
     return (
         <div style={styles.container}>
-            <h2 style={styles.header}>Daily Focus</h2>
-            {/* Display feedback message */}
-            {feedback && <p style={{
-                ...styles.feedback,
-                ...(feedback.type === "success" ? styles.feedbackSuccess : styles.feedbackError)
-            }}>
-                    {feedback.message}
-                    </p>} 
-                <form onSubmit={handleAddTodo} style={styles.form}>
-                    <input
-                        name="todoInput"
-                        autoFocus   
-                        type="text"
-                        placeholder="Enter your task"
-                        value={todoInput}
-                        onChange={(e) => setTodoInput(e.target.value)}
-                        style={styles.input}
-                    />
-                    <button type="submit" style={styles.button}>Add</button>
-                </form>
-               {/* <h2>List of ToDos</h2> */}
-                <ul style={styles.todoList}>
-                    {todos.map((todo) => (
-                        <li key={todo.id} style = {styles.todoItem}>
-                            {editingId === todo.id ? (
-                                 //Render edit input field and button if this todo is being edited
-                                <form onSubmit={handleUpdateTodo} style={styles.editForm}>
-                                    <input
-                                        type="text"
-                                        value={editInput}
-                                        onChange={(e) => setEditInput(e.target.value)}
-                                        style={styles.input}
-                                    />
-                                    <div style={styles.buttonGroup}>
-                                    <button type="submit" style={styles.button}>Update</button>
-                                    <button onClick={handleCancelEdit} style={styles.buttonDanger}>
-                                        Cancel
-                                    </button>
-                                    </div>
-                                </form>
-                            ): (
-                                 <>
-                                    <span style={
-                                        todo.completed
-                                            ? styles.todoTextCompleted
-                                            : styles.todoText
-                                    }
-                                    > 
-                                    {todo.text}
-                                    </span>
-                                    <div style={styles.buttonGroup}>
-                                    <button onClick={() => handleToggleComplete(todo.id)} style={styles.button}>
-                                        {todo.completed ? "Undo" : "Complete"}
-                                    </button>
-                                    <button onClick={()=>handleEditTodo(todo.id)}style={styles.button}>Edit</button>
-                                    <button onClick={() => handleRemoveTodo(todo.id)} style={styles.buttonDanger}>
-                                        Remove
-                                    </button>
-                                    </div>
-                                </>
-                            )}
-                        </li>
-                    ))}
-                    {todos.length === 0 && (
-                        <li style={styles.noTodos}>No task to focus today, add one.</li>
-                    )}  
-                </ul>
+            <Header title="Daily Focus" />
+            <Feedback feedback={feedback} />
+            <TodoForm
+                todoInput={todoInput}
+                setTodoInput={setTodoInput}
+                handleAddTodo={handleAddTodo}
+                editingId={editingId}
+                editInput={editInput}
+                setEditInput={setEditInput}
+                handleUpdateTodo={handleUpdateTodo}
+                handleCancelEdit={handleCancelEdit}
+            />
+            <TodoList
+                todos={todos}
+                handleToggleComplete={handleToggleComplete}
+                handleEditTodo={handleEditTodo}
+                handleRemoveTodo={handleRemoveTodo}
+                />
                 {todos.length > 0 && (
-                    <button onClick={handleClearTodos} style={styles.buttonDanger}>Clear All ToDos</button>
+                    <button 
+                        onClick={handleClearTodos} 
+                        style={{
+                            padding: "10px 20px",
+                            backgroundColor: "#dc3545",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                            alignItems: "center",
+                        }}>
+                        Clear All Tasks
+                    </button>
                 )}
-            </div>
+        </div>
         );
 }
